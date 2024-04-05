@@ -1,4 +1,4 @@
-package com.example.APIcrudconsol.doacoes;
+package com.example.doacoes;
 
 import java.time.LocalDate;
 

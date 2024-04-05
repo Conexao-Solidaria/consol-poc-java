@@ -1,4 +1,4 @@
-package com.example.APIcrudconsol.doacoes;
+package com.example.doacoes;
 
 
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ public class DoacaoController {
 
     ArrayList<Doacao> doacoesListaTeste = new ArrayList<>();
     Doacao doacaoTeste1 = new Doacao(1,"Doacao cestaBasica",LocalDate.of(2024,02,20),1);
-    Doacao doacaoTeste2 = new Doacao(3,"Doacao cestaBasica",LocalDate.of(2024,04,20),1);
+    Doacao doacaoTeste2 = new Doacao(2,"Doacao cestaBasica",LocalDate.of(2024,04,20),1);
 
-    int idDoacao = 1;
+    int idDoacao = 2;
 
     @PostMapping
     public ResponseEntity<Doacao> cadastrarDoacoes(@RequestBody Doacao doacao){
@@ -54,6 +54,19 @@ public class DoacaoController {
         return ResponseEntity.status(201).body(doacoesPorUsuario);
         
     }
+
+    @GetMapping("/pegar-um-usuario/{valor}")
+    public ResponseEntity<Doacao> pegarUmaDoacao(@PathVariable int valor){
+        ordenarDoacoes(doacoesListaTeste);
+
+        Doacao doacaoAchada = binaria(doacoesListaTeste, valor);
+
+        if(doacaoAchada == null){
+            return ResponseEntity.status(404).build();
+        }
+
+        return ResponseEntity.status(200).body(doacaoAchada);
+    }
     
     
     public void ordenarDoacoes(ArrayList<Doacao> v) {
@@ -73,6 +86,25 @@ public class DoacaoController {
         }
 
     }
-    
 
+    static public Doacao binaria(ArrayList<Doacao> v, int x){
+        int indInicio = 0;
+        int indFim = v.size()-1;
+
+        while(indInicio <= indFim){
+            int indMedio = (indInicio + indFim)/2;
+
+            if (x == v.get(indMedio).getIdDoacao()){
+                return v.get(indMedio);
+
+            } else if (x > v.get(indMedio).getIdDoacao()) {
+                indInicio = indMedio + 1;
+
+            }else{
+                indFim = indMedio - 1;
+
+            }
+        }
+        return null;
+    }
 }
