@@ -10,8 +10,6 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("doacoes")
 public class DoacaoController {
-
-
     ArrayList<Doacao> doacoesListaTeste = new ArrayList<>();
     Doacao doacaoTeste1 = new Doacao(1,"Doacao cestaBasica",LocalDate.of(2024,02,20),1);
     Doacao doacaoTeste2 = new Doacao(2,"Doacao cestaBasica",LocalDate.of(2024,04,20),1);
@@ -50,7 +48,7 @@ public class DoacaoController {
             }
         }
         
-        ordenarDoacoes(doacoesPorUsuario);
+        mergeSort(0, doacoesPorUsuario.size(), doacoesPorUsuario);
         return ResponseEntity.status(201).body(doacoesPorUsuario);
         
     }
@@ -106,5 +104,43 @@ public class DoacaoController {
             }
         }
         return null;
+    }
+
+    public static void mergeSort(int p, int r, ArrayList<Doacao> v){
+        if(p < r-1) {
+            int q = (p + r) / 2;
+            mergeSort(p, q, v);
+            mergeSort(q, r, v);
+            intercala(p,q,r,v);
+        }
+    }
+
+    public static void intercala(int p, int q, int r, ArrayList<Doacao> v){
+        int i, j, k;
+        Doacao[] w = new Doacao[r-p];
+
+        i = p;
+        j = q;
+        k = 0;
+
+        while(i < q && j < r){
+            if(v.get(i).getDataDoacao().isBefore(v.get(j).getDataDoacao())){
+                w[k++] = v.get(i++);
+            }
+            else{
+                w[k++] = v.get(j++);
+            }
+        }
+
+        while(i < q){
+            w[k++] = v.get(i++);
+        }
+        while(j < r){
+            w[k++] = v.get(j++);
+        }
+
+        for (int l = p; l < r ; l++) {
+            v.set(l, w[l - p]);
+        }
     }
 }
