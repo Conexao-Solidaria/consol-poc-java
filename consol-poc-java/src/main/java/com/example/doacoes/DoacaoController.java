@@ -66,7 +66,6 @@ public class DoacaoController {
         return ResponseEntity.status(200).body(doacaoAchada);
     }
     
-    
     public void ordenarDoacoes(ArrayList<Doacao> v) {
         for (int i = 0; i < v.size() - 1; i++) {
 
