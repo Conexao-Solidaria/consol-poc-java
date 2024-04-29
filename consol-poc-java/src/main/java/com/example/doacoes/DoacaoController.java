@@ -1,16 +1,18 @@
 package com.example.doacoes;
 
 
+import com.example.ListaObj;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("doacoes")
 public class DoacaoController {
-    ArrayList<Doacao> doacoesListaTeste = new ArrayList<>();
+    List<Doacao> doacoesListaTeste = new ArrayList<>();
     Doacao doacaoTeste1 = new Doacao(1,"Doacao cestaBasica",LocalDate.of(2024,02,20),1);
     Doacao doacaoTeste2 = new Doacao(2,"Doacao cestaBasica",LocalDate.of(2024,04,20),1);
 
@@ -24,13 +26,11 @@ public class DoacaoController {
         doacao.setIdDoacao(++idDoacao);
         doacoesListaTeste.add(doacao);
 
-
-
         return ResponseEntity.status(201).body(doacao);
     }
 
     @GetMapping
-    public ResponseEntity<ArrayList<Doacao>> vizualizarDoacoes(){
+    public ResponseEntity<List<Doacao>> vizualizarDoacoes(){
       if (doacoesListaTeste.isEmpty()){
           return ResponseEntity.status(400).build();
       }
@@ -66,7 +66,7 @@ public class DoacaoController {
         return ResponseEntity.status(200).body(doacaoAchada);
     }
     
-    public void ordenarDoacoes(ArrayList<Doacao> v) {
+    public void ordenarDoacoes(List<Doacao> v) {
         for (int i = 0; i < v.size() - 1; i++) {
 
             for (int j = i + 1; j < v.size(); j++) {
@@ -76,15 +76,12 @@ public class DoacaoController {
                     Doacao aux = v.get(i);
                     v.set(i,v.get(j));
                     v.set(j,aux);
-
                 }
             }
-
         }
-
     }
 
-    static public Doacao binaria(ArrayList<Doacao> v, int x){
+    static public Doacao binaria(List<Doacao> v, int x){
         int indInicio = 0;
         int indFim = v.size()-1;
 
@@ -105,7 +102,7 @@ public class DoacaoController {
         return null;
     }
 
-    public static void mergeSort(int p, int r, ArrayList<Doacao> v){
+    public static void mergeSort(int p, int r, List<Doacao> v){
         if(p < r-1) {
             int q = (p + r) / 2;
             mergeSort(p, q, v);
@@ -114,7 +111,7 @@ public class DoacaoController {
         }
     }
 
-    public static void intercala(int p, int q, int r, ArrayList<Doacao> v){
+    public static void intercala(int p, int q, int r, List<Doacao> v){
         int i, j, k;
         Doacao[] w = new Doacao[r-p];
 

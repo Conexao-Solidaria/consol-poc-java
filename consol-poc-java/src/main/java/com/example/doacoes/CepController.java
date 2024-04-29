@@ -1,5 +1,6 @@
 package com.example.doacoes;
 
+import com.example.ListaObj;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,11 +13,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cep")
 public class CepController {
     private final String CEP_API_URL = "https://viacep.com.br/ws/";
+
+    private ListaObj<Cep> listaObj = new ListaObj<>(20);
 
 
 //    @GetMapping
@@ -35,15 +39,51 @@ public class CepController {
 //    }
 
     @GetMapping("/{cep}")
-    public ResponseEntity<String> pegarCep(@PathVariable String cep) {
+    public ResponseEntity<Cep> pegarCep(@PathVariable String cep) {
         String url = CEP_API_URL + cep + "/json";
         RestTemplate restTemplate = new RestTemplate();
-        String forObject = restTemplate.getForObject(url, String.class);
+        Cep forObject = restTemplate.getForObject(url, Cep.class);
 
-        if(forObject == null){
+        if(forObject == null || forObject.getCep() == null){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().body(restTemplate.getForObject(url, String.class));
+        listaObj.adiciona(forObject);
+
+        return ResponseEntity.ok().body(forObject);
+    }
+
+    @GetMapping
+    public ResponseEntity<ListaObj<Cep>> pegarTodos(){
+        if(listaObj.getTamanho() == 0){
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(listaObj);
+    }
+
+    @GetMapping("/ordenar-cep")
+    public ResponseEntity<ListaObj<Cep>> pegarTodosOrdenados(){
+        if(listaObj.getTamanho() == 0){
+            return ResponseEntity.noContent().build();
+        }
+
+        ordenarCep(listaObj);
+
+        return ResponseEntity.ok(listaObj);
+    }
+
+    public void ordenarCep (ListaObj<Cep> v) {
+        for (int i = 0; i < v.getTamanho() - 1; i++) {
+
+            for (int j = i + 1; j < v.getTamanho(); j++) {
+
+                if (Integer.parseInt(v.getElemento(i).getIbge()) > Integer.parseInt(v.getElemento(j).getIbge())){
+                    Cep aux = v.getElemento(i);
+                    v.trocarPosicao(v.getElemento(i),v.getElemento(j));
+                    v.trocarPosicao(v.getElemento(j),aux);
+                }
+            }
+        }
     }
 }
