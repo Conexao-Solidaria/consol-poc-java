@@ -11,8 +11,9 @@ public class Doacao {
     public Doacao() {
     }
 
-    public Doacao(String descricao, int fkUsuario) {
+    public Doacao(String descricao,LocalDate dataDoacao, int fkUsuario) {
         this.descricao = descricao;
+        this.dataDoacao = dataDoacao;
         this.fkUsuario = fkUsuario;
     }
 

@@ -12,17 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("doacoes")
 public class DoacaoController {
-    List<Doacao> doacoesListaTeste = new ArrayList<>();
-    Doacao doacaoTeste1 = new Doacao(1,"Doacao cestaBasica",LocalDate.of(2024,02,20),1);
-    Doacao doacaoTeste2 = new Doacao(2,"Doacao cestaBasica",LocalDate.of(2024,04,20),1);
-
-    int idDoacao = 2;
+    private List<Doacao> doacoesListaTeste = new ArrayList<>();
+    int idDoacao = 0;
 
     @PostMapping
     public ResponseEntity<Doacao> cadastrarDoacoes(@RequestBody Doacao doacao){
-        doacoesListaTeste.add(doacaoTeste1);
-        doacoesListaTeste.add(doacaoTeste2);
-        doacao.setDataDoacao(LocalDate.now());
         doacao.setIdDoacao(++idDoacao);
         doacoesListaTeste.add(doacao);
 
@@ -50,7 +44,6 @@ public class DoacaoController {
         
         mergeSort(0, doacoesPorUsuario.size(), doacoesPorUsuario);
         return ResponseEntity.status(201).body(doacoesPorUsuario);
-        
     }
 
     @GetMapping("/pegar-um-usuario/{valor}")
